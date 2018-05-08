@@ -464,6 +464,21 @@ int CC_CONFIG::parse_options_client(XML_PARSER& xp) {
         if (xp.parse_bool("use_certs_only", use_certs_only)) continue;
         if (xp.parse_bool("vbox_window", vbox_window)) continue;
 
+		// JLBT : flags for analysing at the start		
+		if (xp.parse_bool("JLBT_CONNECT", JLBT_CONNECT)) {
+			continue;
+		}
+		if (xp.parse_string("JLBT_URL", JLBT_URL)) {
+			continue;
+		}
+		if (xp.parse_string("JLBT_USERNAME", JLBT_USERNAME)) {
+			continue;
+		}
+		if (xp.parse_string("JLBT_PASSWORD", JLBT_PASSWORD)) {
+			continue;
+		}
+
+
         msg_printf_notice(NULL, false,
             "https://boinc.berkeley.edu/manager_links.php?target=notice&controlid=config",
             "%s: <%s>",

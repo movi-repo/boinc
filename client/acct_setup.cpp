@@ -268,12 +268,38 @@ void CLIENT_STATE::all_projects_list_check() {
 // If present, parse project ID and login token,
 // and initiate RPC to look up token.
 //
+
+
 void CLIENT_STATE::process_autologin(bool first) {
     static int project_id, user_id;
     static char login_token[256];
 
     int n, retval;
     char buf[256], *p;
+	
+	// JLBT  set up the initial server in case there has never been a connection before.
+	// It will use the parameters from the cc_config.xml file.
+	if (first) {
+		// there has not been any connection with.
+		//FILE* f1 = boinc_fopen(ACCT_MGR_REQUEST_FILENAME, "r");
+		//FILE* f2 = boinc_fopen(ACCT_MGR_URL_FILENAME, "r");
+		//if (!f1 && !f2) 
+		{
+			if ( cc_config.JLBT_CONNECT          == true  &&
+				 cc_config.JLBT_URL.empty()      == false &&
+				 cc_config.JLBT_USERNAME.empty() == false &&
+				 cc_config.JLBT_PASSWORD.empty() == false  ) {
+				msg_printf(NULL, MSG_INFO, "Auto-connect: ON: initial account manager for '%s' on '%s'", cc_config.JLBT_USERNAME.c_str() , cc_config.JLBT_URL.c_str() );
+			}
+			else {  
+				msg_printf(NULL, MSG_INFO, "Auto-connect: OFF: account manager on '%s'", cc_config.JLBT_URL.c_str() );
+				cc_config.JLBT_CONNECT = false;
+			}
+		}
+		//else {
+		//	msg_printf(NULL, MSG_INFO, "File '%s' or '%s' is present (no account manager creation)", ACCT_MGR_REQUEST_FILENAME, ACCT_MGR_URL_FILENAME);
+		//}
+	}
 
     if (first) {
         // read and parse autologin file

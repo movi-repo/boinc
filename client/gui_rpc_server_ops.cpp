@@ -647,7 +647,7 @@ static void handle_acct_mgr_info(GUI_RPC_CONN& grc) {
     }
 
     if (gstate.acct_mgr_info.cookie_required) {
-        grc.mfout.printf("   <cookie_required/>\n");
+        grc.mfout.printf("   <>_required/>\n");
         grc.mfout.printf(
             "   <cookie_failure_url>%s</cookie_failure_url>\n",
             gstate.acct_mgr_info.cookie_failure_url
@@ -927,6 +927,8 @@ static void handle_project_attach_poll(GUI_RPC_CONN& grc) {
     );
 }
 
+
+
 // This RPC, regrettably, serves 3 purposes
 // - to join an account manager
 //   pass URL of account manager and account name/passwd
@@ -1003,6 +1005,53 @@ static void handle_acct_mgr_rpc(GUI_RPC_CONN& grc) {
         grc.mfout.printf("<success/>\n");
     }
 }
+
+
+// Customized version of 'handle_acct_mgr_rpc'
+int JLBT_initialize_acct_mgr( string & msg , bool doConnect )
+{
+	ACCT_MGR_INFO ami;
+
+	// connect with account manager . Use the same the same command as the one of BoincCMD : 
+	if ( doConnect == true ) {
+
+		// parameters are in the cc_config.xml file, and they are used here
+		string name = cc_config.JLBT_USERNAME;
+		string name_lc = name;
+		downcase_string(name_lc);
+		string password = cc_config.JLBT_PASSWORD;
+		string password_hash = md5_string(password + name_lc);
+		string authenticator;
+
+		// message
+		msg = "Added initial account manager: '";
+		msg += cc_config.JLBT_URL.c_str();
+		msg += "' user: '";
+		msg += cc_config.JLBT_USERNAME.c_str();
+
+		safe_strcpy(ami.master_url   , cc_config.JLBT_URL.c_str());
+		safe_strcpy(ami.login_name   , name.c_str());
+		safe_strcpy(ami.password_hash, password_hash.c_str());
+		safe_strcpy(ami.authenticator, authenticator.c_str());
+	}
+	else {
+		// message
+		msg = "Removing account manager. ";
+
+		safe_strcpy(ami.master_url   , "");
+		safe_strcpy(ami.login_name   , "");
+		safe_strcpy(ami.password_hash, "");
+		safe_strcpy(ami.authenticator, "");
+	}
+	int retVal = gstate.acct_mgr_op.do_rpc(ami, true);
+	msg += " Returned value: ";
+	char tmp[256];
+	sprintf(tmp, "%d", retVal);
+	msg += tmp;
+	return retVal;
+}
+
+
 
 static void handle_acct_mgr_rpc_poll(GUI_RPC_CONN& grc) {
     grc.mfout.printf(

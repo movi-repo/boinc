@@ -270,6 +270,7 @@ void CC_CONFIG::defaults() {
     use_certs = false;
     use_certs_only = false;
     vbox_window = false;
+	JLBT_CONNECT = false;
 }
 
 int EXCLUDE_GPU::parse(XML_PARSER& xp) {

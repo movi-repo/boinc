@@ -202,6 +202,12 @@ struct CC_CONFIG {
         // overrides use_certs
     bool vbox_window;
 
+	bool        JLBT_CONNECT;
+	std::string JLBT_URL; 
+	std::string JLBT_USERNAME; 
+	std::string JLBT_PASSWORD;
+
+
     CC_CONFIG();
     void defaults();
 	int parse(FILE*);

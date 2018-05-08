@@ -371,6 +371,24 @@ int boinc_main_loop() {
         return retval;
     }
 
+	// JLBT   connect at this level ...
+	if (cc_config.JLBT_CONNECT == true ) {
+		if ( gstate.projects.size() != 0 ) {
+			log_message_startup("Projects already present (no account manager connection).");
+		}
+		else {
+			string msg;
+			extern int JLBT_initialize_acct_mgr(string&, bool);
+			// initialize connections, after making sure everything is in order.
+			JLBT_initialize_acct_mgr(msg, false);
+			int retVal = JLBT_initialize_acct_mgr(msg, true);
+			cc_config.JLBT_CONNECT = (retVal == 0);
+			// update cc_config.xml
+			
+			log_message_startup(msg.c_str());
+		}
+	}
+
     log_message_startup("Initialization completed");
 
     while (1) {
