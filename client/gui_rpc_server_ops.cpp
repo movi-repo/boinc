@@ -647,7 +647,6 @@ static void handle_acct_mgr_info(GUI_RPC_CONN& grc) {
     }
 
     if (gstate.acct_mgr_info.cookie_required) {
-        grc.mfout.printf("   <>_required/>\n");
         grc.mfout.printf(
             "   <cookie_failure_url>%s</cookie_failure_url>\n",
             gstate.acct_mgr_info.cookie_failure_url
