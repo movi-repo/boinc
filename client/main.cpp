@@ -383,9 +383,8 @@ int boinc_main_loop() {
 			JLBT_initialize_acct_mgr(msg, false);
 			int retVal = JLBT_initialize_acct_mgr(msg, true);
 			cc_config.JLBT_CONNECT = (retVal == 0);
-			// update cc_config.xml
-			
-			log_message_startup(msg.c_str());
+			// could update the "cc_config.xml". Message iis kept in the log file.
+			msg_printf(NULL, MSG_INFO, msg.c_str());
 		}
 	}
 

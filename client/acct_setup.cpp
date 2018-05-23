@@ -284,11 +284,19 @@ void CLIENT_STATE::process_autologin(bool first) {
 		//FILE* f1 = boinc_fopen(ACCT_MGR_REQUEST_FILENAME, "r");
 		//FILE* f2 = boinc_fopen(ACCT_MGR_URL_FILENAME, "r");
 		//if (!f1 && !f2) 
+		// TEST: here iit forces the reconnection.
 		{
 			if ( cc_config.JLBT_CONNECT          == true  &&
 				 cc_config.JLBT_URL.empty()      == false &&
 				 cc_config.JLBT_USERNAME.empty() == false &&
 				 cc_config.JLBT_PASSWORD.empty() == false  ) {
+
+				// test1: delete files ...
+				boinc_delete_file(ACCT_MGR_URL_FILENAME);
+				boinc_delete_file(ACCT_MGR_LOGIN_FILENAME);
+				// delete connection if present.
+
+
 				msg_printf(NULL, MSG_INFO, "Auto-connect: ON: initial account manager for '%s' on '%s'", cc_config.JLBT_USERNAME.c_str() , cc_config.JLBT_URL.c_str() );
 			}
 			else {  
